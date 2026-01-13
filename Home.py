@@ -66,6 +66,9 @@ schedule = [
 import base64
 from pathlib import Path
 
+schedule[0]["Assignment / Deliverable"] = "HW1"
+schedule[0]["Recording"] = "0108"
+
 # ---- Build df (keep Week as a normal column) ----
 df_show = pd.DataFrame(schedule)
 
@@ -107,6 +110,38 @@ def linkify_sessions(s: str) -> str:
     return ", ".join(out)
 
 df_show["Session Details"] = df_show["Session Details"].apply(linkify_sessions)
+
+# --- HW pdf map ---
+HW_PDF = {
+    "HW1": PDF_DIR / "HW1.pdf",   # <-- change filename if needed
+}
+
+def linkify_assignment(s: str) -> str:
+    if not isinstance(s, str) or not s.strip():
+        return ""
+    key = s.strip()
+    if key in HW_PDF:
+        url = pdf_data_url(HW_PDF[key])
+        if url:
+            return f'<a href="{url}" target="_blank">{key}</a>'
+    return key
+
+df_show["Assignment / Deliverable"] = df_show["Assignment / Deliverable"].apply(linkify_assignment)
+
+# --- Recording link map (label -> url) ---
+REC_URL = {
+    "0108": "https://leccap.engin.umich.edu/leccap/player/r/8M4g3B",
+}
+
+def linkify_recording(s: str) -> str:
+    if not isinstance(s, str) or not s.strip():
+        return ""
+    key = s.strip()
+    if key in REC_URL:
+        return f'<a href="{REC_URL[key]}" target="_blank">{key}</a>'
+    return key
+
+df_show["Recording"] = df_show["Recording"].apply(linkify_recording)
 
 # ---- highlight rows ----
 def highlight_rows(row):
