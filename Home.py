@@ -78,19 +78,13 @@ df_show = pd.DataFrame(schedule)
 # Convert line breaks for Applications
 df_show["Applications"] = df_show["Applications"].str.replace("\n", "<br>", regex=False)
 
-# ---- helper: make file links that work in HTML (data URL) ----
-PDF_DIR = Path("file")   # your folder name in the screenshot: IOE452/file/...
 
-def pdf_data_url(pdf_path: Path) -> str | None:
-    if not pdf_path.exists():
-        return None
-    b64 = base64.b64encode(pdf_path.read_bytes()).decode("utf-8")
-    return f"data:application/pdf;base64,{b64}"
+PAGES_BASE = "https://JulienneHu.github.io/IOE452CorporateFinance"
 
-LEC_PDF = {
-    "Lec0": PDF_DIR / "Lecture0_01082026.pdf",
-    "Lec1": PDF_DIR / "Lecture1_01082026.pdf",
-    "Lec2": PDF_DIR / "Lecture2_01132026.pdf",
+LEC_URL = {
+    "Lec0": f"{PAGES_BASE}/file/Lecture0_01082026.pdf",
+    "Lec1": f"{PAGES_BASE}/file/Lecture1_01082026.pdf",
+    "Lec2": f"{PAGES_BASE}/file/Lecture2_01132026.pdf",
 }
 
 def linkify_sessions(s: str) -> str:
@@ -99,12 +93,8 @@ def linkify_sessions(s: str) -> str:
     parts = [p.strip() for p in s.split(",")]
     out = []
     for p in parts:
-        if p in LEC_PDF:
-            url = pdf_data_url(LEC_PDF[p])
-            if url:
-                out.append(f'<a href="{url}" target="_blank">{p}</a>')
-            else:
-                out.append(p)
+        if p in LEC_URL:
+            out.append(f'<a href="{LEC_URL[p]}" target="_blank" rel="noopener noreferrer">{p}</a>')
         else:
             out.append(p)
     return ", ".join(out)
@@ -112,21 +102,20 @@ def linkify_sessions(s: str) -> str:
 df_show["Session Details"] = df_show["Session Details"].apply(linkify_sessions)
 
 # --- HW pdf map ---
-HW_PDF = {
-    "HW1": PDF_DIR / "HW1.pdf",   # <-- change filename if needed
+HW_URL = {
+    "HW1": f"{PAGES_BASE}/file/HW1.pdf",
 }
 
 def linkify_assignment(s: str) -> str:
     if not isinstance(s, str) or not s.strip():
         return ""
     key = s.strip()
-    if key in HW_PDF:
-        url = pdf_data_url(HW_PDF[key])
-        if url:
-            return f'<a href="{url}" target="_blank">{key}</a>'
+    if key in HW_URL:
+        return f'<a href="{HW_URL[key]}" target="_blank" rel="noopener noreferrer">{key}</a>'
     return key
 
 df_show["Assignment / Deliverable"] = df_show["Assignment / Deliverable"].apply(linkify_assignment)
+
 
 # --- Recording link map (label -> url) ---
 REC_URL = {
