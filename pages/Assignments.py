@@ -11,6 +11,7 @@ def link_url(label: str, url: str) -> str:
 
 df = pd.DataFrame([
     {"Assignment": link_url("HW1", f"{PAGES_BASE}/file/HW1.pdf"), "Solution": ""},
+    {"Assignment": link_url("HW2", f"{PAGES_BASE}/file/HW2.pdf"), "Solution": ""},
 ])
 
 st.markdown(df.to_html(escape=False, index=False), unsafe_allow_html=True)
