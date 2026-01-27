@@ -67,7 +67,13 @@ import base64
 from pathlib import Path
 
 schedule[0]["Assignment / Deliverable"] = "HW1"
+schedule[4]["Assignment / Deliverable"] = "HW2"
+
 schedule[0]["Recording"] = "0108"
+schedule[1]["Recording"] = "0113"
+schedule[2]["Recording"] = "0115"
+schedule[3]["Recording"] = "0120"
+schedule[4]["Recording"] = "0122"
 
 # ---- Build df (keep Week as a normal column) ----
 df_show = pd.DataFrame(schedule)
@@ -85,6 +91,9 @@ LEC_URL = {
     "Lec0": f"{PAGES_BASE}/file/Lecture0_01082026.pdf",
     "Lec1": f"{PAGES_BASE}/file/Lecture1_01082026.pdf",
     "Lec2": f"{PAGES_BASE}/file/Lecture2_01132026.pdf",
+    "Lec3": f"{PAGES_BASE}/file/Lecture3_01152026.pdf",
+    "Lec4": f"{PAGES_BASE}/file/Lecture4_01202026.pdf",
+    "Lec5": f"{PAGES_BASE}/file/Lecture5_01222026.pdf",
 }
 
 def linkify_sessions(s: str) -> str:
@@ -104,6 +113,7 @@ df_show["Session Details"] = df_show["Session Details"].apply(linkify_sessions)
 # --- HW pdf map ---
 HW_URL = {
     "HW1": f"{PAGES_BASE}/file/HW1.pdf",
+    "HW2": f"{PAGES_BASE}/file/HW2.pdf",
 }
 
 def linkify_assignment(s: str) -> str:
@@ -120,6 +130,11 @@ df_show["Assignment / Deliverable"] = df_show["Assignment / Deliverable"].apply(
 # --- Recording link map (label -> url) ---
 REC_URL = {
     "0108": "https://leccap.engin.umich.edu/leccap/player/r/8M4g3B",
+    "0113": "https://leccap.engin.umich.edu/leccap/player/r/Rlmfcy",
+    "0115": "https://leccap.engin.umich.edu/leccap/player/r/CeXhiy",
+    "0120": "https://leccap.engin.umich.edu/leccap/player/r/uQfRVa",
+    "0122": "https://leccap.engin.umich.edu/leccap/player/r/QyGrsw"
+    
 }
 
 def linkify_recording(s: str) -> str:
